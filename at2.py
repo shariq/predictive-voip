@@ -1767,17 +1767,17 @@ def run_dct_vq_example():
     wavfile.write("dct_vq_test_agc.wav", fs, soundsc(agc_vq_d2))
 
 
-def run_phase_reconstruction_example():
-    fs, d = fetch_sample_speech_tapestry()
+def predict_slice(frames):
+    # past 15 frames
+    fs = frames.flatten()
+    start = 15 * 800
+    end = 16 * 800
+    d = 8000
+    return run_phase_reconstruction_example(fs, d, start, end)
 
-    # downsample to 8khz
-    import scipy
-    d = scipy.signal.decimate(d, 2)
-    fs /= 2
+def run_phase_reconstruction_example(fs, d, start, end):
 
     # silence some random interval
-    start = len(d) // 1.2
-    end = start + 800 # .1 sec = 800 samples
     d[start:end] = d.mean()
 
     # actually gives however many components you say! So double what .m file
@@ -1815,14 +1815,7 @@ def run_phase_reconstruction_example():
     FADE = 100
     d[start-FADE:start] *= (1. - (np.arange(FADE)/float(FADE)))
     d[start-FADE:start] += (X_t[start-FADE:start] * (np.arange(FADE)/float(FADE)))
-    d[start:end] = X_t[start:end]
-    d[end:end+FADE] *= (np.arange(FADE)/float(FADE))
-    d[end:end+FADE] += (X_t[end:end+FADE] * (1. - (np.arange(FADE)/float(FADE))))
-
-
-    wavfile.write("phase_original.wav", fs, soundsc(d_orig))
-    wavfile.write("phase_reconstruction.wav", fs, soundsc(X_t))
-    wavfile.write("fixed.wav", fs, soundsc(d))
+    return X_t[start:end]
 
 
 def run_phase_vq_example():
