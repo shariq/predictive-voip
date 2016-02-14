@@ -1768,6 +1768,7 @@ def run_dct_vq_example():
 
 
 def predict_slice(frames):
+    frames = frames[-2]
     d = frames.flatten()
 
     fftsize = 512
@@ -1777,7 +1778,7 @@ def predict_slice(frames):
 
     X_s = X_s[:-1]
     for i in xrange(14): # 13 frames is >0.1sec, plus the one we just chopped off
-        X_s = T.concatenate([X_s, X_s[-1:]], axis=0)
+        X_s = np.concatenate([X_s, X_s[-1:]], axis=0)
 
     X_t = iterate_invert_spectrogram(X_s, fftsize, step, verbose=False)
 
