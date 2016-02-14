@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 '''
 this python script must receive udp packets with audio data and play them
 '''
@@ -11,10 +13,10 @@ import numpy
 from collections import deque
 import random
 
-#from at2 import predict_slice
+from at2 import predict_slice
 
-def predict_slice(x):
-    return random.choice(x)
+#def predict_slice(x):
+#    return random.choice(x)
 
 BUFFER = numpy.zeros((32000, 800), 'int32')
 HAVE_BUFFER = [False] * 32000

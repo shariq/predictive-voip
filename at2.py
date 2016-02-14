@@ -1,6 +1,7 @@
 # License: BSD 3-clause
 # Authors: Kyle Kastner
 
+import pdb
 import numpy as np
 # Do numpy version check for  <= 1.9 ! Something crazy going on in 1.10
 # if int(np.__version__.split(".")[1]) >= 10:
@@ -1768,7 +1769,7 @@ def run_dct_vq_example():
 
 
 def predict_slice(frames):
-    frames = frames[-2]
+    frames = frames[-3:-2]
     d = frames.flatten()
 
     fftsize = 512
@@ -1779,16 +1780,9 @@ def predict_slice(frames):
     X_s = X_s[:-1]
     for i in xrange(14): # 13 frames is >0.1sec, plus the one we just chopped off
         X_s = np.concatenate([X_s, X_s[-1:]], axis=0)
-
-    X_t = iterate_invert_spectrogram(X_s, fftsize, step, verbose=False)
-
-    # warning – this assumes all frames are the same length
-    frame_len = len(frames[0])
-
-    # warning – this predicted frame won't necessarily be phase-aligned with
-    # the original signal, so you might hear a harsh transition. The way to fix
-    # this is either to just use X_t instead of d, or to crossfade between the two.
-    return X_t[len(d):len(d) + frame_len]
+    X_t = iterate_invert_spectrogram(X_s, fftsize, step, verbose = False)
+    frame_len = frames[0].shape[0]
+    return X_t[len(d):len(d)+frame_len]
 
 def run_phase_reconstruction_example(fs, d, start, end):
 
