@@ -8,6 +8,9 @@ from Queue import Queue
 import pdb
 import traceback
 import threading
+import random
+
+PACKET_LOSS = 0.2
 
 import socket
 
@@ -33,8 +36,11 @@ def forever_send_udp_queue():
             timestamp += 1
             timestamp_str = get_timestamp_str(timestamp)
             msg = timestamp_str + data.tostring()
-            sock.sendto(msg, (host, port))
-            print timestamp
+            if random.random() < PACKET_LOSS:
+                print 'simulating losing packet', timestamp
+            else:
+                print 'sending packet', timestamp
+                sock.sendto(msg, (host, port))
             #sock.sendto(data.tostring(), (host,port))
         except:
             traceback.print_exc()

@@ -72,6 +72,7 @@ def forever_receive_from_udp():
             BUFFER[timestamp, :] = frame
             HAVE_BUFFER[timestamp] = True
             print 'got frame of len ', len(data)
+            print 'timestamp is ', timestamp
         except:
             traceback.print_exc()
 
