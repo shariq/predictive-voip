@@ -19,7 +19,7 @@ import time
 output = OutputStream(samplerate=44100, blocksize=16)
 output.start()
 
-def callback(in_data, time_info, status):
+def callback(in_data, out_data, time_info, status):
     output.write(in_data*4)
     return continue_flag
 
